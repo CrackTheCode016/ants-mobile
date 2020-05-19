@@ -1,0 +1,7 @@
+{
+  "name": "ants-covid",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
