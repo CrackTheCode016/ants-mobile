@@ -1,25 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Inbox
-    </ion-title>
+    <div class="logo">
+      <img src="../../assets/ants.png">
+    </div>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">
-        Inbox
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-list>
-    <app-message *ngFor="let message of getMessages()" [message]="message"></app-message>
-  </ion-list>
+
+  <section class="account-bal">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>ACCOUNT BALANCE</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="header">
+          <img class="account-bal-img" src="../../assets/ants-white.png" />
+          0 ANT$
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </section>
+  <section>
+    <ion-button expand="full" color="primary">DAILY SURVEY</ion-button>
+    <ion-button expand="full" color="secondary">WEARABLE PAIRING</ion-button>
+  </section>
 </ion-content>

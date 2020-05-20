@@ -1,10 +1,11 @@
-.account-bal-img {
-    max-height: 130px;
+.congrats-img {
+    max-height: 150px;
+    margin: 20px 0px 20px 0px;
 }
 
 ion-card-header,
 .header,
-.account-bal {
+.congrats {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,18 +13,17 @@ ion-card-header,
     color: white;
 }
 
-ion-card-title {
-    color: white;
-    text-align: center;
-    font-size: 32px;
+.congrats {
+    height: 100%;
 }
 
-.header {
+.header p {
+    text-align: center;
     font-size: 40px;
-    font-style: bold;
 }
 
 ion-card {
     background: linear-gradient(#08BEEA, #4817CA);
-    width: 80%;
+    width: 90%;
+    height: 100%;
 }

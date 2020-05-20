@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="logo">
+      <img src="../../assets/ants.png">
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <section class="login-header">
+    <img class="login-header-img" src="../../assets/ants.png">
+  </section>
+
+  <div class="signup" *ngIf="!signedup">
+    <section class="login-form">
+      <ion-label position="stacked">USERNAME<ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
+      <ion-label position="stacked">PIN<ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
+      <ion-label position="stacked">RE-ENTER PIN<ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
+      <ion-button expand="full" color="primary">SIGNUP</ion-button>
+    </section>
+  </div>
+
+  <div class="login" *ngIf="signedup">
+    <section class="login-form">
+      <ion-label position="stacked">PIN<ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
+      <ion-button expand="full" color="primary">LOGIN</ion-button>
+      <p class="specialtext">DON'T HAVE AN ACCOUNT? SIGN UP!</p>
+    </section>
+  </div>
+
+  <section class="byiodlt">
+    <img class="byiodlt-img" src="../../assets/byiodlt@2x.png">
+  </section>
+</ion-content>
