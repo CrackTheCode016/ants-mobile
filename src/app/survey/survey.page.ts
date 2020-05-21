@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface Option {
   selected: boolean;
-  option: string;
+  option: string | boolean;
 }
 
 interface Question {
@@ -12,7 +13,7 @@ interface Question {
 }
 
 interface Answer {
-  key: string,
+  key: string;
   value: boolean | string;
 }
 
@@ -23,11 +24,12 @@ interface Answer {
 })
 export class SurveyPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   previousSelectedId: number;
   previousSelectedOption: Option;
   currentOptions: Map<number, Option>;
+  selectedOption: Option;
   currentQuestion: Question;
   questions: Question[] = [];
   answers: Answer[] = [];
@@ -35,7 +37,7 @@ export class SurveyPage implements OnInit {
   questionProgression: number;
 
   handleSelection(id: number, option: Option) {
-    console.log(id, this.previousSelectedId)
+    console.log(id, option)
     if (this.previousSelectedId === undefined) {
       this.previousSelectedOption = option;
       this.previousSelectedId = id;
@@ -50,16 +52,11 @@ export class SurveyPage implements OnInit {
 
   generateDataReport(answers: Answer[]) {
     // answers to datareport, send to blockchain
+    console.log(answers)
   }
 
   fetchQuestions() {
     // fetch schema for survey
-  }
-
-  nextQuestion() {
-  }
-
-  ngOnInit() {
     const options: Map<number, Option> = new Map();
     options.set(1, {
       selected: false,
@@ -83,10 +80,28 @@ export class SurveyPage implements OnInit {
     });
     this.questions.push({ questionKey: 'feeling', questionText: 'How are you feeling?', options });
     this.questions.push({ questionKey: 'sentiment', questionText: 'How are you feeling?', options });
-    this.currentQuestion = this.questions[0];
+    this.questionProgression = 0;
+    this.currentQuestion = this.questions[this.questionProgression];
     this.currentOptions = this.currentQuestion.options;
-    this.questionProgression = 1;
     this.questionCount = this.questions.length;
+  }
+
+  nextQuestion() {
+    console.log(this.previousSelectedOption);
+    this.questionProgression++;
+    this.answers.push({ key: this.currentQuestion.questionKey, value: this.previousSelectedOption.option });
+    if (this.questionProgression === this.questions.length) {
+      // Submit report from answer array, then navigate to congrats once done processing
+      // last answer
+      this.generateDataReport(this.answers);
+      this.router.navigate(['/congrats']);
+    } else {
+      this.currentQuestion = this.questions[this.questionProgression];
+    }
+  }
+
+  ngOnInit() {
+    this.fetchQuestions();
   }
 
 }

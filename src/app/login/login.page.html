@@ -24,7 +24,7 @@
       <ion-label position="stacked">RE-ENTER PIN<ion-text color="danger">*</ion-text>
       </ion-label>
       <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-button expand="full" color="primary">SIGNUP</ion-button>
+      <ion-button [routerLink]="['/home']" expand="full" color="primary">SIGNUP</ion-button>
     </section>
   </div>
 
@@ -33,7 +33,7 @@
       <ion-label position="stacked">PIN<ion-text color="danger">*</ion-text>
       </ion-label>
       <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-button expand="full" color="primary">LOGIN</ion-button>
+      <ion-button [routerLink]="['/home']" expand="full" color="primary">LOGIN</ion-button>
       <p class="specialtext">DON'T HAVE AN ACCOUNT? SIGN UP!</p>
     </section>
   </div>

@@ -24,7 +24,8 @@
     </ion-card>
   </section>
   <section>
-    <ion-button expand="full" color="primary">DAILY SURVEY</ion-button>
+    <ion-button *ngIf="canTakeSurvey" [routerLink]="['/survey']" expand="full" color="primary">DAILY SURVEY</ion-button>
+    <ion-button *ngIf="!canTakeSurvey" expand="full" color="danger" disabled>DAILY SURVEY NOT AVAILABLE</ion-button>
     <ion-button expand="full" color="secondary">WEARABLE PAIRING</ion-button>
   </section>
 </ion-content>

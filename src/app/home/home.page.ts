@@ -9,6 +9,8 @@ import { DataService, Message } from '../services/data.service';
 export class HomePage {
   constructor(private data: DataService) {}
 
+  canTakeSurvey = true;
+
   refresh(ev) {
     setTimeout(() => {
       ev.detail.complete();
