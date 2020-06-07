@@ -1,30 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-interface Option {
-  selected: boolean;
-  option: string | boolean;
-}
-
-interface Question {
-  questionKey: string;
-  questionText: string;
-  options: Map<number, Option>;
-}
-
-interface Answer {
-  key: string;
-  value: boolean | string;
-}
+import { AlertService } from '../services/alert.service';
+import { Option, Question, Answer } from '../model/common.model';
+import { QuestionsService } from '../services/questions.service';
+import { UserService } from '../services/user.service';
+import { Account } from 'symbol-sdk';
 
 @Component({
   selector: 'app-survey',
   templateUrl: './survey.page.html',
   styleUrls: ['./survey.page.scss'],
 })
-export class SurveyPage implements OnInit {
 
-  constructor(private router: Router) { }
+export class SurveyPage {
+
+  constructor(
+    private router: Router,
+    private alert: AlertService,
+    private questionService: QuestionsService,
+    private userService: UserService) { }
 
   previousSelectedId: number;
   previousSelectedOption: Option;
@@ -35,6 +29,7 @@ export class SurveyPage implements OnInit {
   answers: Answer[] = [];
   questionCount: number;
   questionProgression: number;
+  user: Account;
 
   handleSelection(id: number, option: Option) {
     console.log(id, option)
@@ -50,58 +45,52 @@ export class SurveyPage implements OnInit {
     this.currentOptions.set(id, option);
   }
 
-  generateDataReport(answers: Answer[]) {
-    // answers to datareport, send to blockchain
+  async generateDataReport(answers: Answer[]) {
     console.log(answers)
+    await this.questionService.sendAnswers(answers, this.user).toPromise();
+    this.router.navigate(['/congrats']);
   }
 
-  fetchQuestions() {
-    // fetch schema for survey
-    const options: Map<number, Option> = new Map();
-    options.set(1, {
-      selected: false,
-      option: 'NULL'
-    });
-    options.set(2, {
-      selected: false,
-      option: 'NULL'
-    });
-    options.set(3, {
-      selected: false,
-      option: 'NULL'
-    });
-    options.set(4, {
-      selected: false,
-      option: 'NULL'
-    });
-    options.set(5, {
-      selected: false,
-      option: 'NULL'
-    });
-    this.questions.push({ questionKey: 'feeling', questionText: 'How are you feeling?', options });
-    this.questions.push({ questionKey: 'sentiment', questionText: 'How are you feeling?', options });
-    this.questionProgression = 0;
-    this.currentQuestion = this.questions[this.questionProgression];
+  async fetchQuestions() {
+    this.questions = await this.questionService.fetchQuestions().toPromise();
+    this.questionProgression = 1;
+    this.currentQuestion = this.questions[this.questionProgression - 1];
     this.currentOptions = this.currentQuestion.options;
     this.questionCount = this.questions.length;
   }
 
   nextQuestion() {
-    console.log(this.previousSelectedOption);
-    this.questionProgression++;
-    this.answers.push({ key: this.currentQuestion.questionKey, value: this.previousSelectedOption.option });
-    if (this.questionProgression === this.questions.length) {
-      // Submit report from answer array, then navigate to congrats once done processing
-      // last answer
-      this.generateDataReport(this.answers);
-      this.router.navigate(['/congrats']);
+    if (this.previousSelectedOption === undefined) {
+      this.alert.showCustomAlert('No Option', 'No Option Selected!', 'Please select an option before proceeding');
     } else {
-      this.currentQuestion = this.questions[this.questionProgression];
+      this.questionProgression++;
+      console.log(this.currentQuestion)
+      if (this.questionProgression === this.questionCount + 1) {
+        this.answers.push({ key: this.currentQuestion.questionKey, value: this.previousSelectedOption.option });
+        this.generateDataReport(this.answers);
+      } else {
+        this.answers.push({ key: this.currentQuestion.questionKey, value: this.previousSelectedOption.option });
+        this.currentQuestion = this.questions[this.questionProgression - 1];
+        this.currentOptions = this.currentQuestion.options;
+        this.previousSelectedOption = undefined;
+        this.previousSelectedId = undefined;
+        console.log("progression!", this.questionCount, this.questionProgression)
+      }
     }
   }
 
-  ngOnInit() {
-    this.fetchQuestions();
+  back() {
+    this.questionProgression--;
+    this.answers.push({ key: this.currentQuestion.questionKey, value: this.previousSelectedOption.option });
+    this.currentQuestion = this.questions[this.questionProgression - 1];
+    this.currentOptions = this.currentQuestion.options;
+    this.previousSelectedOption = undefined;
+    this.previousSelectedId = undefined;
+    console.log("progression!", this.questionCount, this.questionProgression)
   }
 
+  async ionViewDidEnter() {
+    this.user = this.userService.getUser();
+    this.fetchQuestions();
+  }
 }

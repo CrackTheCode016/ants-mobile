@@ -13,30 +13,34 @@
     <img class="login-header-img" src="../../assets/ants.png">
   </section>
 
-  <div class="signup" *ngIf="!signedup">
-    <section class="login-form">
-      <ion-label position="stacked">USERNAME<ion-text color="danger">*</ion-text>
-      </ion-label>
-      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-label position="stacked">PIN<ion-text color="danger">*</ion-text>
-      </ion-label>
-      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-label position="stacked">RE-ENTER PIN<ion-text color="danger">*</ion-text>
-      </ion-label>
-      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-button [routerLink]="['/home']" expand="full" color="primary">SIGNUP</ion-button>
-    </section>
+  <div *ngIf="signedUp !== undefined">
+    <div class="signup" *ngIf="!signedUp">
+      <section class="login-form">
+        <ion-label position="stacked">PASSWORD<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="password" required type="text"></ion-input>
+        <ion-label position="stacked">RE-ENTER PASSWORD<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input [(ngModel)]="confirmPassword" required type="text"></ion-input>
+        <ion-button expand="full" color="primary" (click)="signup()">
+          SIGNUP</ion-button>
+      </section>
+    </div>
+
+    <div class="login" *ngIf="signedUp">
+      <section class="login-form">
+        <form>
+          <ion-label [(ngModel)]="loginPassword" position="stacked">PASSWORD<ion-text color="danger">*</ion-text>
+          </ion-label>
+          <ion-input required type="text"></ion-input>
+          <ion-button expand="full" color="primary" (click)="login()">
+            LOGIN</ion-button>
+          <p class="specialtext">DON'T HAVE AN ACCOUNT? SIGN UP!</p>
+        </form>
+      </section>
+    </div>
   </div>
 
-  <div class="login" *ngIf="signedup">
-    <section class="login-form">
-      <ion-label position="stacked">PIN<ion-text color="danger">*</ion-text>
-      </ion-label>
-      <ion-input required type="text" oninput="handleFirstNameValue(event)"></ion-input>
-      <ion-button [routerLink]="['/home']" expand="full" color="primary">LOGIN</ion-button>
-      <p class="specialtext">DON'T HAVE AN ACCOUNT? SIGN UP!</p>
-    </section>
-  </div>
 
   <section class="byiodlt">
     <img class="byiodlt-img" src="../../assets/byiodlt@2x.png">

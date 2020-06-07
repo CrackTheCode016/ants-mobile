@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { StorageService } from './services/storage.service';
+import { UserService } from './services/user.service';
 
 const routes: Routes = [
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
-  },
   {
     path: '',
     redirectTo: 'login',
@@ -22,6 +20,11 @@ const routes: Routes = [
   {
     path: 'congrats',
     loadChildren: () => import('./congrats/congrats.module').then(m => m.CongratsPageModule)
+  },
+  {
+    path: 'main',
+    canActivate: [StorageService, UserService],
+    loadChildren: () => import('./main/main.module').then(m => m.MainPageModule)
   },
 ];
 
